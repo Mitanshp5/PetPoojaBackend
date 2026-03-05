@@ -1,8 +1,22 @@
 from fastapi import FastAPI
 from kitchen_main import app as kitchen_app
 from mobile_main import app as mobile_app
+from core.database import connect_to_mongo, close_mongo_connection
+from contextlib import asynccontextmanager
 
-app = FastAPI(title="PetPooja Main API", description="Main entry point for all backend services")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    await connect_to_mongo()
+    yield
+    # Shutdown
+    await close_mongo_connection()
+
+app = FastAPI(
+    title="PetPooja Main API", 
+    description="Main entry point for all backend services",
+    lifespan=lifespan
+)
 
 # Mount sub-applications
 app.mount("/kitchen", kitchen_app)

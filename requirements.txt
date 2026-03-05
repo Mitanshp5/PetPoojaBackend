@@ -1,4 +1,7 @@
 fastapi
 uvicorn[standard]
 pydantic
-sqlalchemy
+motor
+dnspython
+pydantic-settings
+python-dotenv
