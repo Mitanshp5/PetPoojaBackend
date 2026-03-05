@@ -22,6 +22,10 @@ app = FastAPI(
 app.mount("/kitchen", kitchen_app)
 app.mount("/mobile", mobile_app)
 
+# Include modules
+from modules.revenue_intelligence.router import router as revenue_router
+app.include_router(revenue_router)
+
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the PetPooja API Backend"}

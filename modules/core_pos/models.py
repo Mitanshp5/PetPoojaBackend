@@ -1,4 +1,5 @@
 from typing import Optional, List, Annotated, Any
+from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic_core import core_schema
 from bson import ObjectId
@@ -65,3 +66,4 @@ class OrderModel(MongoBaseModel):
     status: str = "pending" # pending, completed, cancelled
     source: str # voice, manual
     items: List[OrderItemModel] = []
+    created_at: Optional[datetime] = Field(default_factory=datetime.now)
