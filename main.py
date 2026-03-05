@@ -24,7 +24,10 @@ app.mount("/mobile", mobile_app)
 
 # Include modules
 from modules.revenue_intelligence.router import router as revenue_router
+from modules.voice_copilot.router import router as voice_router
+
 app.include_router(revenue_router)
+app.include_router(voice_router)
 
 @app.get("/")
 def read_root():

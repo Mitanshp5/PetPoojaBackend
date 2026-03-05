@@ -5,3 +5,4 @@ motor
 dnspython
 pydantic-settings
 python-dotenv
+google-generativeai
