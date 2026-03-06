@@ -4,7 +4,11 @@ from collections import defaultdict
 from typing import List, Dict
 import math
 
-from .schemas import MenuItemAnalysis, MenuAnalysisResponse, ComboRecommendation, ComboResponse
+from .schemas import (
+    MenuItemAnalysis, MenuAnalysisResponse, 
+    ComboRecommendation, ComboResponse,
+    TrendResponse, DailyTrend
+)
 
 class RevenueIntelligenceService:
     def __init__(self, db: AsyncIOMotorDatabase):
@@ -177,3 +181,36 @@ class RevenueIntelligenceService:
         recommendations.sort(key=lambda x: x.confidence_score, reverse=True)
 
         return ComboResponse(recommendations=recommendations[:20]) # Return top 20
+
+    async def get_daily_trends(self) -> TrendResponse:
+        """
+        Aggregates order counts and revenue grouped by day.
+        """
+        pipeline = [
+            # Group by date part of created_at
+            {"$group": {
+                "_id": { "$dateToString": { "format": "%Y-%m-%d", "date": "$created_at" } },
+                "revenue": { "$sum": { "$reduce": {
+                    "input": "$items",
+                    "initialValue": 0,
+                    "in": { "$add": ["$$value", { "$multiply": ["$$this.quantity", "$$this.selling_price"] }] }
+                }}},
+                "order_count": { "$sum": 1 }
+            }},
+            {"$sort": { "_id": 1 }}
+        ]
+        
+        results = await self.orders_col.aggregate(pipeline).to_list(length=30)
+        
+        # Format for frontend (assuming last 7 days or similar)
+        trends = []
+        for res in results:
+            # Convert YYYY-MM-DD to Mon, Tue, etc. if needed, or just keep ISO
+            trends.append(DailyTrend(
+                day=res["_id"],
+                revenue=round(res["revenue"], 2),
+                orders=res["order_count"]
+            ))
+            
+        return TrendResponse(trends=trends)
+

@@ -50,11 +50,13 @@ class MongoBaseModel(BaseModel):
 
 class MenuItemModel(MongoBaseModel):
     name: str
-    description: Optional[str] = None
+    description: Optional[str] = ""
     selling_price: float
     food_cost: float
     is_active: bool = True
     category: str
+    veg: bool = True
+
 
 class OrderItemModel(BaseModel):
     name: str

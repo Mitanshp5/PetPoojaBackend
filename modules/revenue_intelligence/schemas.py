@@ -30,3 +30,12 @@ class ComboRecommendation(BaseModel):
 
 class ComboResponse(BaseModel):
     recommendations: List[ComboRecommendation]
+
+class DailyTrend(BaseModel):
+    day: str
+    revenue: float
+    orders: int
+
+class TrendResponse(BaseModel):
+    trends: List[DailyTrend]
+

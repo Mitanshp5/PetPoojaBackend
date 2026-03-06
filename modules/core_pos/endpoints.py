@@ -1,12 +1,21 @@
 from fastapi import APIRouter, Depends, HTTPException
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from bson import ObjectId
-from typing import Dict
+from typing import Dict, List
 
 from api.dependencies import get_db
 from .models import MenuItemModel
 
 router = APIRouter(prefix="/menu-items", tags=["Menu Management"])
+
+@router.get("/", response_model=List[MenuItemModel])
+async def get_all_menu_items(db: AsyncIOMotorDatabase = Depends(get_db)):
+    """
+    Returns all active menu items.
+    """
+    cursor = db["menu_items"].find({"is_active": True})
+    items = await cursor.to_list(length=1000)
+    return items
 
 @router.patch("/{item_id}")
 async def update_menu_item_price(
@@ -34,3 +43,4 @@ async def update_menu_item_price(
         raise HTTPException(status_code=404, detail="Item not found")
         
     return {"status": "success", "message": f"Price updated to {new_price}"}
+
