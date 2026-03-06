@@ -56,12 +56,16 @@ class MenuItemModel(MongoBaseModel):
     category: str
 
 class OrderItemModel(BaseModel):
-    menu_item_id: str
-    quantity: int = 1
+    name: str
+    qty: int = 1
+    modifiers: Optional[List[str]] = []
     notes: Optional[str] = None
 
 class OrderModel(MongoBaseModel):
-    total_amount: float
-    status: str = "pending" # pending, completed, cancelled
-    source: str # voice, manual
+    orderNumber: str
     items: List[OrderItemModel] = []
+    status: str = "new"  # new, preparing, ready, served
+    type: str = "dine-in" # dine-in, takeaway, delivery
+    table: Optional[str] = None
+    time: str
+    elapsed: int = 0
