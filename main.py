@@ -21,10 +21,10 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Since it's local dev, limit in production
-
+    allow_origins=["*", "http://192.168.56.1:8080", "http://localhost:8080", "http://localhost:5173", "http://127.0.0.1:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
