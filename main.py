@@ -5,6 +5,7 @@ from kitchen_main import app as kitchen_app
 from mobile_main import app as mobile_app
 from core.database import connect_to_mongo, close_mongo_connection
 from contextlib import asynccontextmanager
+from fastapi.middleware.cors import CORSMiddleware
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -23,6 +24,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], # Since it's local dev, limit in production
+
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
