@@ -30,8 +30,8 @@ class RevenueIntelligenceService:
             {"$unwind": "$items"},
             {"$group": {
                 "_id": "$items.menu_item_id",
-                "total_quantity": {"$sum": "$items.quantity"},
-                "total_revenue": {"$sum": {"$multiply": ["$items.quantity", 0]}} # Placeholder if we don't have price at order time, we calculate it 
+                "total_quantity": {"$sum": "$items.qty"},
+                "total_revenue": {"$sum": {"$multiply": ["$items.qty", 0]}} # Placeholder if we don't have price at order time, we calculate it 
             }}
         ]
         
