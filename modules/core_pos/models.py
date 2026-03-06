@@ -59,6 +59,7 @@ class MenuItemModel(MongoBaseModel):
 
 
 class OrderItemModel(BaseModel):
+    menu_item_id: str
     name: str
     qty: int = 1
     modifiers: Optional[List[str]] = []

@@ -100,7 +100,7 @@ async def seed_database():
             qty = random.randint(1, 2)
             total_amount += (item.selling_price * qty)
             order_items_models.append(
-                OrderItemModel(menu_item_id=item_map[item.name], quantity=qty).model_dump()
+                OrderItemModel(menu_item_id=item_map[item.name], name=item.name, qty=qty).model_dump()
             )
 
         # Random timestamp within the last 30 days
