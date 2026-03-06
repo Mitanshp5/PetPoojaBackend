@@ -34,8 +34,11 @@ class RevenueIntelligenceService:
             {"$unwind": "$items"},
             {"$group": {
                 "_id": "$items.menu_item_id",
-                "total_quantity": {"$sum": "$items.qty"},
-                "total_revenue": {"$sum": {"$multiply": ["$items.qty", "$items.selling_price"]}}
+                "total_quantity": {"$sum": {"$add": [{"$ifNull": ["$items.qty", 0]}, {"$ifNull": ["$items.quantity", 0]}]}},
+                "total_revenue": {"$sum": {"$multiply": [
+                    {"$add": [{"$ifNull": ["$items.qty", 0]}, {"$ifNull": ["$items.quantity", 0]}]}, 
+                    "$items.selling_price"
+                ]}}
             }}
 
         ]
@@ -63,7 +66,7 @@ class RevenueIntelligenceService:
 
             analysis_results.append(MenuItemAnalysis(
                 item_id=item_id_str,
-                name=item["name"],
+                name=item.get("name", "Unknown Item"),
                 category=item.get("category", "Uncategorized"),
                 selling_price=selling_price,
                 food_cost=food_cost,
@@ -126,15 +129,15 @@ class RevenueIntelligenceService:
 
         items_cursor = self.items_col.find()
         items = await items_cursor.to_list(length=5000)
-        item_names = {str(item["_id"]): item["name"] for item in items}
+        item_names = {str(item["_id"]): item.get("name", "Unknown Item") for item in items}
 
         # Track how many times each item is bought, and how many times pairs are bought
         item_frequencies = defaultdict(int)
         pair_frequencies = defaultdict(int)
 
         for order in orders:
-            order_items = [i["menu_item_id"] for i in order.get("items", [])]
-            # Deduplicate items in a single order (we care about distinct items bought together)
+            order_items = [i.get("menu_item_id") for i in order.get("items", []) if i.get("menu_item_id")]
+            # Deduplicate items in a single order
             unique_items = list(set(order_items))
 
             for i in range(len(unique_items)):
@@ -143,7 +146,6 @@ class RevenueIntelligenceService:
 
                 for j in range(i + 1, len(unique_items)):
                     item_2 = unique_items[j]
-                    # Create a sorted tuple to treat (A,B) the same as (B,A) for pair counting
                     pair = tuple(sorted([item_1, item_2]))
                     pair_frequencies[pair] += 1
 
@@ -159,29 +161,30 @@ class RevenueIntelligenceService:
                 # Confidence B -> A = P(A & B) / P(B)
                 conf_b_a = (freq / item_frequencies[item_b]) * 100
 
-                # We can generate two directional recommendations or just pick the strongest
-                if conf_a_b > 15.0: # Lowered from 30% to match historical data distribution
+                # Determine the strongest direction for this frequent pair
+            if conf_a_b >= conf_b_a:
+                if conf_a_b > 15.0:
                     recommendations.append(ComboRecommendation(
-                        primary_item_id=item_a,
-                        primary_item_name=item_names.get(item_a, "Unknown"),
-                        recommended_item_id=item_b,
-                        recommended_item_name=item_names.get(item_b, "Unknown"),
+                        primary_item_id=str(item_a),
+                        primary_item_name=item_names.get(str(item_a), "Unknown"),
+                        recommended_item_id=str(item_b),
+                        recommended_item_name=item_names.get(str(item_b), "Unknown"),
                         confidence_score=round(conf_a_b, 1)
                     ))
-                
+            else:
                 if conf_b_a > 15.0:
                     recommendations.append(ComboRecommendation(
-                        primary_item_id=item_b,
-                        primary_item_name=item_names.get(item_b, "Unknown"),
-                        recommended_item_id=item_a,
-                        recommended_item_name=item_names.get(item_a, "Unknown"),
+                        primary_item_id=str(item_b),
+                        primary_item_name=item_names.get(str(item_b), "Unknown"),
+                        recommended_item_id=str(item_a),
+                        recommended_item_name=item_names.get(str(item_a), "Unknown"),
                         confidence_score=round(conf_b_a, 1)
                     ))
 
         # Sort by confidence score descending
         recommendations.sort(key=lambda x: x.confidence_score, reverse=True)
 
-        return ComboResponse(recommendations=recommendations[:20]) # Return top 20
+        return ComboResponse(recommendations=recommendations[:20])
 
     async def get_daily_trends(self) -> TrendResponse:
         """
@@ -194,7 +197,10 @@ class RevenueIntelligenceService:
                 "revenue": { "$sum": { "$reduce": {
                     "input": "$items",
                     "initialValue": 0,
-                    "in": { "$add": ["$$value", { "$multiply": ["$$this.quantity", "$$this.selling_price"] }] }
+                    "in": { "$add": ["$$value", { "$multiply": [
+                        {"$add": [{"$ifNull": ["$$this.qty", 0]}, {"$ifNull": ["$$this.quantity", 0]}]}, 
+                        "$$this.selling_price"
+                    ] }] }
                 }}},
                 "order_count": { "$sum": 1 }
             }},

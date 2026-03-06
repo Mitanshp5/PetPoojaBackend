@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "C:\MyStuff\VS\PetPooja\backend\modules\revenue_intelligence\service.py", line 137, in get_combo_recommendations
+    order_items = [i["menu_item_id"] for i in order.get("items", [])]
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\MyStuff\VS\PetPooja\backend\modules\revenue_intelligence\service.py", line 137, in <listcomp>
+    order_items = [i["menu_item_id"] for i in order.get("items", [])]
+                   ~^^^^^^^^^^^^^^^^
+KeyError: 'menu_item_id'
