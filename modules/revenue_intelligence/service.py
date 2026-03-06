@@ -17,7 +17,7 @@ class RevenueIntelligenceService:
         Calculates contribution margins, sales velocity, and BCG Matrix classification.
         """
         items_cursor = self.items_col.find({"is_active": True})
-        items = await items_cursor.to_list(length=1000)
+        items = await items_cursor.to_list(length=5000)
         
         if not items:
             return MenuAnalysisResponse(items=[], summary={}, average_margin=0, average_velocity=0)
@@ -35,7 +35,7 @@ class RevenueIntelligenceService:
             }}
         ]
         
-        velocity_results = await self.orders_col.aggregate(pipeline).to_list(length=1000)
+        velocity_results = await self.orders_col.aggregate(pipeline).to_list(length=20000)
         velocity_map = {res["_id"]: res["total_quantity"] for res in velocity_results}
 
         analysis_results: List[MenuItemAnalysis] = []
@@ -117,10 +117,10 @@ class RevenueIntelligenceService:
         """
         # Fetch all orders to analyze items
         orders_cursor = self.orders_col.find({"items": {"$exists": True, "$not": {"$size": 0}}})
-        orders = await orders_cursor.to_list(length=5000)
+        orders = await orders_cursor.to_list(length=20000)
 
         items_cursor = self.items_col.find()
-        items = await items_cursor.to_list(length=1000)
+        items = await items_cursor.to_list(length=5000)
         item_names = {str(item["_id"]): item["name"] for item in items}
 
         # Track how many times each item is bought, and how many times pairs are bought
@@ -155,7 +155,7 @@ class RevenueIntelligenceService:
                 conf_b_a = (freq / item_frequencies[item_b]) * 100
 
                 # We can generate two directional recommendations or just pick the strongest
-                if conf_a_b > 30.0: # Only suggest if there's a >30% chance
+                if conf_a_b > 15.0: # Lowered from 30% to match historical data distribution
                     recommendations.append(ComboRecommendation(
                         primary_item_id=item_a,
                         primary_item_name=item_names.get(item_a, "Unknown"),
@@ -164,7 +164,7 @@ class RevenueIntelligenceService:
                         confidence_score=round(conf_a_b, 1)
                     ))
                 
-                if conf_b_a > 30.0:
+                if conf_b_a > 15.0:
                     recommendations.append(ComboRecommendation(
                         primary_item_id=item_b,
                         primary_item_name=item_names.get(item_b, "Unknown"),
