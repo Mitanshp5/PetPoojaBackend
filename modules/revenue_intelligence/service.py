@@ -66,7 +66,9 @@ class RevenueIntelligenceService:
                 margin_percentage=round(margin_pct, 2),
                 sales_velocity=velocity,
                 total_revenue=round(revenue, 2),
-                classification="Unclassified" # Computed next
+                classification="Unclassified", # Computed next
+                price_optimization="", # Computed next
+                optimal_price=0.0 # Computed next
             ))
 
         # 3. Dynamic BCG Matrix Classification
@@ -82,12 +84,20 @@ class RevenueIntelligenceService:
 
             if is_high_margin and is_high_volume:
                 result.classification = "Star"
+                result.price_optimization = "Highly profitable & popular. Recommended action: Test a 3-5% price increase to maximize AOV without hurting volume."
+                result.optimal_price = round(result.selling_price * 1.05, 2)
             elif not is_high_margin and is_high_volume:
                 result.classification = "Plowhorse"  # Risk: low margin, takes up kitchen time
+                result.price_optimization = "High volume but low margin. Recommended action: Raise price slightly or review raw ingredient costs to improve margins."
+                result.optimal_price = round(result.selling_price * 1.08, 2)
             elif is_high_margin and not is_high_volume:
                 result.classification = "Puzzle"     # Opportunity: needs promotion
+                result.price_optimization = "High margin but low sales. Recommended action: Feature prominently on the menu, run specials, or bundle into combos."
+                result.optimal_price = result.selling_price # Keep same, but promote
             else:
                 result.classification = "Dog"        # Consider removing
+                result.price_optimization = "Low margin & low sales volume. Recommended action: Standardize recipe to cut costs, or remove from menu entirely to reduce inventory waste."
+                result.optimal_price = result.selling_price # Or liquidate
 
             summary_counts[result.classification] += 1
 

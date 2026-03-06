@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from kitchen_main import app as kitchen_app
@@ -34,9 +35,15 @@ app.mount("/mobile", mobile_app)
 # Include modules
 from modules.revenue_intelligence.router import router as revenue_router
 from modules.voice_copilot.router import router as voice_router
+from modules.core_pos.endpoints import router as core_pos_router
 
 app.include_router(revenue_router)
 app.include_router(voice_router)
+app.include_router(core_pos_router)
+
+@app.get("/config/gemini-key")
+def get_gemini_key():
+    return {"api_key": os.getenv("GEMINI_API_KEY")}
 
 @app.get("/")
 def read_root():

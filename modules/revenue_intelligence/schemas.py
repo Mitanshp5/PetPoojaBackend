@@ -12,6 +12,8 @@ class MenuItemAnalysis(BaseModel):
     sales_velocity: int # Quantity sold in period
     total_revenue: float
     classification: str # Star, Plowhorse, Puzzle, Dog
+    price_optimization: str
+    optimal_price: float
 
 class MenuAnalysisResponse(BaseModel):
     items: List[MenuItemAnalysis]

@@ -1,0 +1,103 @@
+﻿.\venv\Scripts\python.exe : C:\MyStuff\VS\PetPo
+oja\backend\venv\Lib\site-packages\pydantic\_in
+ternal\_config.py:383: UserWarning: Valid 
+config keys have changed in V2:
+At line:1 char:1
++ .\venv\Scripts\python.exe scripts\seed_db.py 
+> error.log 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C 
+   :\MyStuff\VS\P... changed in V2::String) [  
+  ], RemoteException
+    + FullyQualifiedErrorId : NativeCommandErr 
+   or
+ 
+* 'allow_population_by_field_name' has been 
+renamed to 'validate_by_name'
+  warnings.warn(message, UserWarning)
+Traceback (most recent call last):
+  File "C:\MyStuff\VS\PetPooja\backend\scripts\
+seed_db.py", line 7, in <module>
+    from modules.core_pos.models import 
+MenuItemModel
+  File "C:\MyStuff\VS\PetPooja\backend\modules\
+core_pos\models.py", line 20, in <module>
+    class MongoBaseModel(BaseModel):
+  File "C:\MyStuff\VS\PetPooja\backend\venv\Lib
+\site-packages\pydantic\_internal\_model_constr
+uction.py", line 255, in __new__
+    complete_model_class(
+  File "C:\MyStuff\VS\PetPooja\backend\venv\Lib
+\site-packages\pydantic\_internal\_model_constr
+uction.py", line 648, in complete_model_class
+    schema = gen_schema.generate_schema(cls)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\MyStuff\VS\PetPooja\backend\venv\Lib
+\site-packages\pydantic\_internal\_generate_sch
+ema.py", line 729, in generate_schema
+    schema = self._generate_schema_inner(obj)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\MyStuff\VS\PetPooja\backend\venv\Lib
+\site-packages\pydantic\_internal\_generate_sch
+ema.py", line 1023, in _generate_schema_inner
+    return self._model_schema(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\MyStuff\VS\PetPooja\backend\venv\Lib
+\site-packages\pydantic\_internal\_generate_sch
+ema.py", line 856, in _model_schema
+    {k: self._generate_md_field_schema(k, v, 
+decorators) for k, v in fields.items()},
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\MyStuff\VS\PetPooja\backend\venv\Lib
+\site-packages\pydantic\_internal\_generate_sch
+ema.py", line 856, in <dictcomp>
+    {k: self._generate_md_field_schema(k, v, 
+decorators) for k, v in fields.items()},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^
+  File "C:\MyStuff\VS\PetPooja\backend\venv\Lib
+\site-packages\pydantic\_internal\_generate_sch
+ema.py", line 1228, in 
+_generate_md_field_schema
+    schema, metadata = 
+self._common_field_schema(name, field_info, 
+decorators)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\MyStuff\VS\PetPooja\backend\venv\Lib
+\site-packages\pydantic\_internal\_generate_sch
+ema.py", line 1282, in _common_field_schema
+    schema = self._apply_annotations(
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\MyStuff\VS\PetPooja\backend\venv\Lib
+\site-packages\pydantic\_internal\_generate_sch
+ema.py", line 2227, in _apply_annotations
+    schema = get_inner_schema(source_type)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\MyStuff\VS\PetPooja\backend\venv\Lib
+\site-packages\pydantic\_internal\_schema_gener
+ation_shared.py", line 83, in __call__
+    schema = self._handler(source_type)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\MyStuff\VS\PetPooja\backend\venv\Lib
+\site-packages\pydantic\_internal\_generate_sch
+ema.py", line 2208, in inner_handler
+    metadata_js_function = 
+_extract_get_pydantic_json_schema(obj)
+                           
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\MyStuff\VS\PetPooja\backend\venv\Lib
+\site-packages\pydantic\_internal\_generate_sch
+ema.py", line 2632, in 
+_extract_get_pydantic_json_schema
+    raise PydanticUserError(
+pydantic.errors.PydanticUserError: The 
+`__modify_schema__` method is not supported in 
+Pydantic v2. Use 
+`__get_pydantic_json_schema__` instead in 
+class `PyObjectId`.
+
+For further information visit https://errors.py
+dantic.dev/2.12/u/custom-json-schema
