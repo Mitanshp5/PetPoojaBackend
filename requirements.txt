@@ -6,3 +6,4 @@ dnspython
 pydantic-settings
 python-dotenv
 google-genai
+gunicorn
