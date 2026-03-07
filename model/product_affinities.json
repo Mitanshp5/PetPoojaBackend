@@ -1,0 +1,257 @@
+{
+  "M001": [
+    {
+      "item_id": "M008",
+      "confidence_score": 22.2,
+      "co_occurrence_count": 539
+    },
+    {
+      "item_id": "M011",
+      "confidence_score": 20.4,
+      "co_occurrence_count": 496
+    },
+    {
+      "item_id": "M012",
+      "confidence_score": 19.1,
+      "co_occurrence_count": 464
+    }
+  ],
+  "M006": [
+    {
+      "item_id": "M015",
+      "confidence_score": 20.2,
+      "co_occurrence_count": 488
+    },
+    {
+      "item_id": "M008",
+      "confidence_score": 20.0,
+      "co_occurrence_count": 483
+    },
+    {
+      "item_id": "M002",
+      "confidence_score": 19.8,
+      "co_occurrence_count": 478
+    }
+  ],
+  "M010": [
+    {
+      "item_id": "M011",
+      "confidence_score": 19.9,
+      "co_occurrence_count": 478
+    },
+    {
+      "item_id": "M008",
+      "confidence_score": 19.6,
+      "co_occurrence_count": 472
+    },
+    {
+      "item_id": "M015",
+      "confidence_score": 19.5,
+      "co_occurrence_count": 469
+    }
+  ],
+  "M015": [
+    {
+      "item_id": "M009",
+      "confidence_score": 20.8,
+      "co_occurrence_count": 506
+    },
+    {
+      "item_id": "M006",
+      "confidence_score": 20.1,
+      "co_occurrence_count": 488
+    },
+    {
+      "item_id": "M008",
+      "confidence_score": 20.0,
+      "co_occurrence_count": 486
+    }
+  ],
+  "M007": [
+    {
+      "item_id": "M015",
+      "confidence_score": 20.1,
+      "co_occurrence_count": 476
+    },
+    {
+      "item_id": "M008",
+      "confidence_score": 20.0,
+      "co_occurrence_count": 474
+    },
+    {
+      "item_id": "M006",
+      "confidence_score": 19.6,
+      "co_occurrence_count": 465
+    }
+  ],
+  "M013": [
+    {
+      "item_id": "M002",
+      "confidence_score": 20.8,
+      "co_occurrence_count": 487
+    },
+    {
+      "item_id": "M006",
+      "confidence_score": 20.2,
+      "co_occurrence_count": 472
+    },
+    {
+      "item_id": "M005",
+      "confidence_score": 20.0,
+      "co_occurrence_count": 468
+    }
+  ],
+  "M014": [
+    {
+      "item_id": "M008",
+      "confidence_score": 20.2,
+      "co_occurrence_count": 482
+    },
+    {
+      "item_id": "M005",
+      "confidence_score": 20.1,
+      "co_occurrence_count": 479
+    },
+    {
+      "item_id": "M011",
+      "confidence_score": 19.8,
+      "co_occurrence_count": 474
+    }
+  ],
+  "M005": [
+    {
+      "item_id": "M002",
+      "confidence_score": 20.1,
+      "co_occurrence_count": 485
+    },
+    {
+      "item_id": "M014",
+      "confidence_score": 19.9,
+      "co_occurrence_count": 479
+    },
+    {
+      "item_id": "M011",
+      "confidence_score": 19.9,
+      "co_occurrence_count": 479
+    }
+  ],
+  "M002": [
+    {
+      "item_id": "M013",
+      "confidence_score": 19.9,
+      "co_occurrence_count": 487
+    },
+    {
+      "item_id": "M005",
+      "confidence_score": 19.8,
+      "co_occurrence_count": 485
+    },
+    {
+      "item_id": "M006",
+      "confidence_score": 19.5,
+      "co_occurrence_count": 478
+    }
+  ],
+  "M008": [
+    {
+      "item_id": "M001",
+      "confidence_score": 21.7,
+      "co_occurrence_count": 539
+    },
+    {
+      "item_id": "M004",
+      "confidence_score": 20.4,
+      "co_occurrence_count": 508
+    },
+    {
+      "item_id": "M011",
+      "confidence_score": 19.7,
+      "co_occurrence_count": 491
+    }
+  ],
+  "M012": [
+    {
+      "item_id": "M008",
+      "confidence_score": 19.9,
+      "co_occurrence_count": 484
+    },
+    {
+      "item_id": "M004",
+      "confidence_score": 19.3,
+      "co_occurrence_count": 468
+    },
+    {
+      "item_id": "M014",
+      "confidence_score": 19.3,
+      "co_occurrence_count": 468
+    }
+  ],
+  "M011": [
+    {
+      "item_id": "M001",
+      "confidence_score": 20.0,
+      "co_occurrence_count": 496
+    },
+    {
+      "item_id": "M008",
+      "confidence_score": 19.8,
+      "co_occurrence_count": 491
+    },
+    {
+      "item_id": "M005",
+      "confidence_score": 19.3,
+      "co_occurrence_count": 479
+    }
+  ],
+  "M009": [
+    {
+      "item_id": "M015",
+      "confidence_score": 21.5,
+      "co_occurrence_count": 506
+    },
+    {
+      "item_id": "M011",
+      "confidence_score": 19.8,
+      "co_occurrence_count": 466
+    },
+    {
+      "item_id": "M010",
+      "confidence_score": 19.6,
+      "co_occurrence_count": 462
+    }
+  ],
+  "M003": [
+    {
+      "item_id": "M008",
+      "confidence_score": 21.1,
+      "co_occurrence_count": 490
+    },
+    {
+      "item_id": "M004",
+      "confidence_score": 20.6,
+      "co_occurrence_count": 477
+    },
+    {
+      "item_id": "M011",
+      "confidence_score": 19.9,
+      "co_occurrence_count": 461
+    }
+  ],
+  "M004": [
+    {
+      "item_id": "M008",
+      "confidence_score": 21.2,
+      "co_occurrence_count": 508
+    },
+    {
+      "item_id": "M015",
+      "confidence_score": 20.0,
+      "co_occurrence_count": 479
+    },
+    {
+      "item_id": "M003",
+      "confidence_score": 19.9,
+      "co_occurrence_count": 477
+    }
+  ]
+}

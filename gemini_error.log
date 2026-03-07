@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "D:\hackthons_main\PetPooja\backend\venv\Lib\site-packages\google\genai\live.py", line 1105, in connect
+    raw_response = await ws.recv(decode=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\hackthons_main\PetPooja\backend\venv\Lib\site-packages\websockets\asyncio\connection.py", line 324, in recv
+    raise self.protocol.close_exc from self.recv_exc
+websockets.exceptions.ConnectionClosedError: received 1011 (internal error) Internal error encountered.; then sent 1011 (internal error) Internal error encountered.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\hackathons\PetPooja\backend\modules\voice_copilot\live_handler.py", line 88, in handle_gemini_live_session
+    async with client.aio.live.connect(model="gemini-2.5-flash-native-audio-latest", config=config) as session:
+  File "C:\Users\RPatel\.pyenv\pyenv-win\versions\3.11.9\Lib\contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\hackthons_main\PetPooja\backend\venv\Lib\site-packages\google\genai\live.py", line 1115, in connect
+    errors.APIError.raise_error(code, reason, None)
+  File "D:\hackthons_main\PetPooja\backend\venv\Lib\site-packages\google\genai\errors.py", line 163, in raise_error
+    raise cls(status_code, response_json, response)
+google.genai.errors.APIError: 1011 None. Internal error encountered.

@@ -42,10 +42,12 @@ app.mount("/mobile", mobile_app)
 # Include modules
 from modules.revenue_intelligence.router import router as revenue_router
 from modules.voice_copilot.router import router as voice_router
+from modules.voice_copilot.vapi_router import router as vapi_router
 from modules.core_pos.endpoints import router as core_pos_router
 
 app.include_router(revenue_router)
 app.include_router(voice_router)
+app.include_router(vapi_router)
 app.include_router(core_pos_router)
 
 @app.get("/config/gemini-key")
