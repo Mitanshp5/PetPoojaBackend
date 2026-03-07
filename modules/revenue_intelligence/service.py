@@ -15,6 +15,23 @@ class RevenueIntelligenceService:
         self.db = db
         self.items_col = self.db["menu_items"]
         self.orders_col = self.db["orders"]
+        self.promoted_col = self.db["promoted_combos"]
+
+    async def promote_combo(self, primary_id: str, recommended_id: str, is_promoted: bool):
+        """
+        Persists the promotion status of a combo.
+        """
+        if is_promoted:
+            await self.promoted_col.update_one(
+                {"primary_id": primary_id, "recommended_id": recommended_id},
+                {"$set": {"is_promoted": True}},
+                upsert=True
+            )
+        else:
+            await self.promoted_col.delete_one(
+                {"primary_id": primary_id, "recommended_id": recommended_id}
+            )
+        return True
 
     async def analyze_menu_performance(self) -> MenuAnalysisResponse:
         """
@@ -123,6 +140,11 @@ class RevenueIntelligenceService:
         """
         Simple Association Rule logic (Market Basket Analysis) to find items frequently bought together.
         """
+        # Fetch promoted combos first
+        promoted_cursor = self.promoted_col.find()
+        promoted_list = await promoted_cursor.to_list(length=100)
+        promoted_map = {(p["primary_id"], p["recommended_id"]): True for p in promoted_list}
+
         # Fetch all orders to analyze items
         orders_cursor = self.orders_col.find({"items": {"$exists": True, "$not": {"$size": 0}}})
         orders = await orders_cursor.to_list(length=20000)
@@ -162,27 +184,42 @@ class RevenueIntelligenceService:
                 conf_b_a = (freq / item_frequencies[item_b]) * 100
 
                 # Determine the strongest direction for this frequent pair
-            if conf_a_b >= conf_b_a:
-                if conf_a_b > 15.0:
-                    recommendations.append(ComboRecommendation(
-                        primary_item_id=str(item_a),
-                        primary_item_name=item_names.get(str(item_a), "Unknown"),
-                        recommended_item_id=str(item_b),
-                        recommended_item_name=item_names.get(str(item_b), "Unknown"),
-                        confidence_score=round(conf_a_b, 1)
-                    ))
-            else:
-                if conf_b_a > 15.0:
-                    recommendations.append(ComboRecommendation(
-                        primary_item_id=str(item_b),
-                        primary_item_name=item_names.get(str(item_b), "Unknown"),
-                        recommended_item_id=str(item_a),
-                        recommended_item_name=item_names.get(str(item_a), "Unknown"),
-                        confidence_score=round(conf_b_a, 1)
-                    ))
+                if conf_a_b >= conf_b_a:
+                    if conf_a_b > 15.0:
+                        recommendations.append(ComboRecommendation(
+                            primary_item_id=str(item_a),
+                            primary_item_name=item_names.get(str(item_a), "Unknown"),
+                            recommended_item_id=str(item_b),
+                            recommended_item_name=item_names.get(str(item_b), "Unknown"),
+                            confidence_score=round(conf_a_b, 1),
+                            is_promoted=promoted_map.get((str(item_a), str(item_b)), False)
+                        ))
+                else:
+                    if conf_b_a > 15.0:
+                        recommendations.append(ComboRecommendation(
+                            primary_item_id=str(item_b),
+                            primary_item_name=item_names.get(str(item_b), "Unknown"),
+                            recommended_item_id=str(item_a),
+                            recommended_item_name=item_names.get(str(item_a), "Unknown"),
+                            confidence_score=round(conf_b_a, 1),
+                            is_promoted=promoted_map.get((str(item_b), str(item_a)), False)
+                        ))
 
-        # Sort by confidence score descending
-        recommendations.sort(key=lambda x: x.confidence_score, reverse=True)
+        # Add any promoted combos that weren't caught by the frequency logic (manual overrides)
+        current_pairs = {(r.primary_item_id, r.recommended_item_id) for r in recommendations}
+        for (p_id, r_id) in promoted_map:
+            if (p_id, r_id) not in current_pairs:
+                recommendations.append(ComboRecommendation(
+                    primary_item_id=p_id,
+                    primary_item_name=item_names.get(p_id, "Unknown"),
+                    recommended_item_id=r_id,
+                    recommended_item_name=item_names.get(r_id, "Unknown"),
+                    confidence_score=0.0, # Manual promotion
+                    is_promoted=True
+                ))
+
+        # Sort: Promoted first, then by confidence score
+        recommendations.sort(key=lambda x: (x.is_promoted, x.confidence_score), reverse=True)
 
         return ComboResponse(recommendations=recommendations[:20])
 
