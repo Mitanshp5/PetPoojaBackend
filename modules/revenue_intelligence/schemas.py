@@ -27,9 +27,15 @@ class ComboRecommendation(BaseModel):
     recommended_item_id: str
     recommended_item_name: str
     confidence_score: float # Percentage of times bought together
+    is_promoted: Optional[bool] = False
 
 class ComboResponse(BaseModel):
     recommendations: List[ComboRecommendation]
+
+class PromoteComboRequest(BaseModel):
+    primary_item_id: str
+    recommended_item_id: str
+    is_promoted: bool
 
 class DailyTrend(BaseModel):
     day: str

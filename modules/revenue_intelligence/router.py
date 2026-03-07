@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from api.dependencies import get_db
 
-from .schemas import MenuAnalysisResponse, ComboResponse, TrendResponse
+from .schemas import MenuAnalysisResponse, ComboResponse, TrendResponse, PromoteComboRequest
 from .service import RevenueIntelligenceService
 
 router = APIRouter(prefix="/revenue", tags=["Revenue Intelligence"])
@@ -23,6 +23,13 @@ async def get_combo_recommendations(service: RevenueIntelligenceService = Depend
     Returns automated combo recommendations based on historical order association (Market Basket Analysis).
     """
     return await service.get_combo_recommendations()
+
+@router.post("/combos/promote")
+async def promote_combo(request: PromoteComboRequest, service: RevenueIntelligenceService = Depends(get_revenue_service)):
+    """
+    Promotes or demotes a specific combo manually. Promoted combos are prioritized in AI suggestions.
+    """
+    return await service.promote_combo(request.primary_item_id, request.recommended_item_id, request.is_promoted)
 
 @router.get("/trends", response_model=TrendResponse)
 async def get_revenue_trends(service: RevenueIntelligenceService = Depends(get_revenue_service)):
