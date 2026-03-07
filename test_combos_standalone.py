@@ -20,6 +20,9 @@ async def test_combos():
     try:
         results = await service.get_combo_recommendations()
         print(f"Success! Found {len(results.recommendations)} recommendations.")
+    except Exception as e:
+        print(f"FAILED get_combo_recommendations: {e}")
+        traceback.print_exc()
     print("Running analyze_menu_performance...")
     try:
         analysis = await service.analyze_menu_performance()
